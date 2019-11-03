@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "mp-toptips": "../../components/toptips/toptips",
+    "mp-cell": "../../components/cell/cell",
+    "mp-cells": "../../components/cells/cells",
+    "mp-icon": "../../components/icon/icon"
+  }
+}

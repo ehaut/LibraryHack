@@ -1,0 +1,12 @@
+<mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
+<mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<view>
+  <mp-cells ext-class="my-cells" title="{{booking.seatName+'  '+booking.createTime}}">
+    <mp-cell bindtap="sign" hover value="签到"></mp-cell>
+    <mp-cell bindtap="signoff" hover value="签退"></mp-cell>
+    <mp-cell bindtap="leave" hover value="临时离开"></mp-cell>
+    <mp-cell bindtap="leaveback" hover value="重新返回"></mp-cell>
+    <mp-cell bindtap="cancel" hover value="取消预约"></mp-cell>
+    <mp-cell value="更多功能开发中" footer='github.com/lovelywhite'></mp-cell>
+  </mp-cells>
+</view>

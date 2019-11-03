@@ -1,0 +1,19 @@
+<!--miniprogram/pages/book-seat/index.wxml-->
+<mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
+<mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<scroll-view wx:if="{{bookings.length!==0}}" scroll-y style="height:{{scroll_height}}rpx">
+  <view wx:for="{{bookings}}" class="scroll" wx:key="index" bindtap="redirect" data-booking="{{item}}">
+    <view>{{item.seatName}}</view>
+    <view class="date">
+      <view>{{item.startDate}}</view>
+      <view>{{item.endDate}}</view>
+      <view class="descr">{{item.descr?item.descr:'正常签退'}}</view>
+    </view>
+    <mp-icon icon="arrow" color="grey"></mp-icon>
+  </view>
+</scroll-view>
+<view wx:else class="scroll" style="justify-content:center">
+  <view>
+    无记录
+  </view>
+</view>

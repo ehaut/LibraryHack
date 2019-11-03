@@ -1,0 +1,40 @@
+<inputBox title='为了安全起见请输入密码' placeholder='密码' maxlength='30' bindinputConfirm='onInputConfirm' bindinputCancel='onInputCancel' wx:if='{{ showEdit }}'>
+</inputBox>
+<mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}" bindhide='hide'></mp-toptips>
+<mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<view class="weui-search-bar">
+  <view class="weui-search-bar__form">
+    <view class="weui-search-bar__box">
+      <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+      <input type="text" class="weui-search-bar__input" placeholder="输入学号/姓名" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindconfirm="getUserlist"/>
+      <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+        <icon type="clear" size="14"></icon>
+      </view>
+    </view>
+    <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+      <icon class="weui-icon-search" type="search" size="14"></icon>
+      <view class="weui-search-bar__text">{{inputVal==''?'输入学号/姓名':inputVal}}</view>
+    </label>
+  </view>
+  <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">搜索</view>
+</view>
+<scroll-view wx:if="{{userlist.length!==0}}" scroll-y style="height:{{scroll_height}}rpx">
+  <view wx:for="{{userlist}}" class="scroll" wx:key="index" bindtap="redirect" data-person="{{item}}">
+    <view>
+      <view>{{item.displayname}}</view>
+      <view>{{item.username}}</view>
+    </view>
+    <mp-icon icon="arrow" color="grey"></mp-icon>
+  </view>
+</scroll-view>
+<view wx:else >
+  <view class="scroll" bindtap="showTip" style="justify-content:center;color:#CDC1C5">
+    输入学号查找你的信息
+  </view>
+    <view class="scroll" bindtap="showTip" style="justify-content:center;color:#FF6A6A">
+    当前列表为空
+  </view>
+    <view class="scroll" bindtap="showTip" style="justify-content:flex-end;color:#FFBBFF">
+    Util by Lovelywhite
+  </view>
+</view>

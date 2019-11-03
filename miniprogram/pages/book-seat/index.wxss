@@ -1,0 +1,19 @@
+/* miniprogram/pages/book-seat/index.wxss */
+@import '../../style/weui.wxss';
+
+.date {
+  margin-bottom: 10rpx;
+}
+
+.scroll {
+  background: white;
+  margin: 10rpx;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

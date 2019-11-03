@@ -1,0 +1,25 @@
+<!--miniprogram/pages/book-seat/index.wxml-->
+<mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
+<mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<mp-cells class="date" ext-class="my-cells">
+  <picker mode='date' value="{{date}}" bindchange="bindDateChange">
+    <mp-cell hover value="选择预约时间" footer="{{date}}"></mp-cell>
+  </picker>
+</mp-cells>
+
+<block wx:if="{{next}}">
+  <scroll-view wx:if="{{regions.length!==0}}" scroll-y style="height:{{scroll_height}}rpx">
+    <view wx:for="{{regions}}" class="scroll" wx:key="index" bindtap="redirect" data-region="{{item}}">
+      <view>{{item.regionName}} 余量：{{item.cannum}}</view>
+      <mp-icon icon="arrow" color="grey"></mp-icon>
+    </view>
+  </scroll-view>
+</block>
+<block wx:else>
+  <scroll-view wx:if="{{seats.length!==0}}" scroll-y style="height:{{scroll_height}}rpx">
+  <view wx:for="{{seats}}" class="scroll" wx:key="index" bindtap="book" data-seat="{{item}}">
+    <view>{{item.seatName}}</view>
+    <mp-icon icon="arrow" color="grey"></mp-icon>
+  </view>
+  </scroll-view>
+</block>
