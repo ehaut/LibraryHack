@@ -7,7 +7,13 @@
     <view class="date">
       <view>{{item.startDate}}</view>
       <view>{{item.endDate}}</view>
-      <view class="descr">{{item.descr?item.descr:'正常签退'}}</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='1'}}">已预约</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='2'}}">已签到</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='3'}}">临时离开</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='4'}}">重新返回</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='5'}}">已取消</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='6'}}">已签退</view>
+      <view class="descr" wx:if="{{item.bookingStatus=='7'}}">已违约</view>
     </view>
     <mp-icon icon="arrow" color="grey"></mp-icon>
   </view>

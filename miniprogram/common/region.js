@@ -1,8 +1,8 @@
 //获取region
 export function getRegion(time) {
   return new Promise((resl, rej) => {
-    let date = new Date();
-    let dateString = " " + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds()
+    let date = new Date(new Date().getTime() + 1200000);
+    let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/region',
       method: 'get',
@@ -32,8 +32,8 @@ export function getRegion(time) {
 //获取seat
 export function getSeat(time, position) {
   return new Promise((resl, rej) => {
-    let date = new Date();
-    let dateString = " " + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds()
+    let date = new Date(new Date().getTime() + 1200000);
+    let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/query',
       data:
@@ -64,8 +64,8 @@ export function getSeat(time, position) {
 //预定座位
 export function bookSeat(time, position, openid, seatid) {
   return new Promise((resl, rej) => {
-    let date = new Date();
-    let dateString = " " + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds()
+    let date = new Date(new Date().getTime() + 1200000);
+    let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/addbooking',
       data:
@@ -163,6 +163,10 @@ export function leaveback(openid, bookingid) {
       {
         openid: openid,
         bookingid: bookingid
+      },     
+      header: {//请求头
+        "Content-Type": "application/json",
+        // "Content-Type": "application/x-www-form-urlencoded"
       },
       success(res) {
         if (res.statusCode == 200) {

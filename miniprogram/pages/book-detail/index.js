@@ -23,7 +23,7 @@ Page({
     let page = this
     wx.showModal({
       title: '提示',
-      content: '您即将签到：' + page.data.booking.createTime + ",确定？",
+      content: '您即将签到,确定？',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
@@ -56,7 +56,7 @@ Page({
     let page = this
     wx.showModal({
       title: '提示',
-      content: '您即将签退：' + page.data.booking.createTime + ",确定？",
+      content: '您即将签退,确定？',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
@@ -90,7 +90,7 @@ Page({
     let page = this
     wx.showModal({
       title: '提示',
-      content: '您即将临时离开：' + page.data.booking.createTime + ",确定？",
+      content: '您即将临时离开,确定？',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
@@ -123,7 +123,7 @@ Page({
     let page = this
     wx.showModal({
       title: '提示',
-      content: '您即将回到：' + page.data.booking.createTime + ",确定？",
+      content: '您即将返回,确定？',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
@@ -156,7 +156,7 @@ Page({
     let page = this
     wx.showModal({
       title: '提示',
-      content: '您即将取消：' + page.data.booking.seatName + ",确定？",
+      content: '您即将取消预约,确定？',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
