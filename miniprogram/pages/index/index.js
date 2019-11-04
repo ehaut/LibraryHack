@@ -156,7 +156,7 @@ Page({
     } else {
       wx.stopPullDownRefresh()
       page.setData({
-        error: '请输入学号'
+        error: '请输入学号/姓名'
       })
     }
   },

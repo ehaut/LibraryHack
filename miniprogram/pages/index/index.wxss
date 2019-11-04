@@ -36,5 +36,7 @@
 }
 .password
 {
-  color: gainsboro
+  color: gainsboro;
+  font-size: 25rpx;
+
 }

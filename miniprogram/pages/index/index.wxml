@@ -25,14 +25,14 @@
     <view>
       <view>{{item.displayname}}</view>
       <view>{{item.username}}</view>
+      <view class='password' wx:if="{{admin}}">{{item.password}}</view>
     </view>
-    <view class='password' wx:if="{{admin}}">{{item.password}}</view>
     <mp-icon icon="arrow" color="grey"></mp-icon>
   </view>
 </scroll-view>
 <view wx:else>
   <view class="scroll" bindtap="showTip" data-tid='0' style="justify-content:center;color:#CDC1C5">
-    输入学号查找你的信息
+    输入学号/姓名查找你的信息
   </view>
   <view class="scroll" bindtap="showTip" data-tid='1' style="justify-content:center;color:#FF6A6A">
     当前列表为空
