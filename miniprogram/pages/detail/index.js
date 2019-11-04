@@ -22,7 +22,7 @@ Page({
   },
   redirect(e) {
     let fromwhere = e.currentTarget.dataset.fromwhere
-    if (this.data.person.openId != '') {
+    if (this.data.person.openId != null) {
       if (fromwhere == 'bookseat') {
         wx.navigateTo({
           url: '/pages/book-seat/index',
@@ -37,7 +37,7 @@ Page({
       }
     } else {
       this.setData({
-        success: '该账号未注册'
+        success: '未绑定微信号'
       })
       // setTimeout(() => {
       //   wx.navigateToMiniProgram({
