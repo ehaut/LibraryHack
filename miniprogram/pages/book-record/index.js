@@ -14,7 +14,7 @@ Page({
     next: true, //代表是否能进入下一步
     scroll_height: 0,
     person: {},
-    booking:{},
+    booking: {},
   },
 
   /**
@@ -28,14 +28,16 @@ Page({
     this.setData({
       scroll_height: windowHeight * 750 / windowWidth - (160) - 30
     })
+
+    this.getBook()
+  },
+  getBook() {
     wx.showLoading({
       title: '加载中',
       mask: true
     })
-    this.getBook()
-  },
-  getBook() {
     getBooking(this.data.person.openId).then(res => {
+      console.log(res)
       this.setData({
         bookings: res.res.data.page.list
       })
@@ -43,16 +45,15 @@ Page({
       this.setData({
         error: '错误'
       })
-    }).finally(res=>{
+    }).finally(res => {
       wx.hideLoading()
     })
   },
-  redirect(e)
-  {
+  redirect(e) {
     let booking = e.currentTarget.dataset.booking
     this.setData(
       {
-        booking:booking
+        booking: booking
       }
     )
     wx.navigateTo({

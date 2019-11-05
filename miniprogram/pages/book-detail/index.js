@@ -1,5 +1,12 @@
 // miniprogram/pages/detail/index.js
-let { leave, leaveback, cancel, sign, signoff, keepon } = require('../../common/region.js')
+let {
+  leave,
+  leaveback,
+  cancel,
+  sign,
+  signoff,
+  keepon
+} = require('../../common/region.js')
 Page({
 
   data: {
@@ -10,12 +17,10 @@ Page({
   },
   onLoad(e) {
     let pages = getCurrentPages()
-    this.setData(
-      {
-        booking: pages[pages.length - 2].data.booking,
-        person: pages[pages.length - 2].data.person
-      }
-    )
+    this.setData({
+      booking: pages[pages.length - 2].data.booking,
+      person: pages[pages.length - 2].data.person
+    })
     console.log(this.data.booking)
     console.log(this.data.person)
   },
@@ -32,20 +37,16 @@ Page({
           })
           sign(page.data.person.openId, page.data.booking.id).then(
             res => {
-              page.setData(
-                {
-                  success:'签到成功'
-                }
-              )
+              page.setData({
+                success: '签到成功'
+              })
             }
           ).catch(res => {
-            page.setData(
-              {
-                error:res.res &&res.res.data.msg? res.res.data.msg:'错误'
-              }
-            )
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+            })
           }).finally(res => {
-            
+
             wx.hideLoading()
           })
         }
@@ -65,21 +66,17 @@ Page({
           })
           signoff(page.data.person.openId, page.data.booking.id).then(
             res => {
-              page.setData(
-                {
-                  success:'签退成功'
-                }
-              )
+              page.setData({
+                success: '签退成功'
+              })
             }
           ).catch(res => {
-            page.setData(
-              {
-                error:res.res &&res.res.data.msg? res.res.data.msg:'错误'
-              }
-            )
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+            })
 
           }).finally(res => {
-            
+
             wx.hideLoading()
           })
         }
@@ -99,20 +96,16 @@ Page({
           })
           leave(page.data.person.openId, page.data.booking.id).then(
             res => {
-              page.setData(
-                {
-                  success:'离开成功'
-                }
-              )
+              page.setData({
+                success: '离开成功'
+              })
             }
           ).catch(res => {
-            page.setData(
-              {
-                error:res.res &&res.res.data.msg? res.res.data.msg:'错误'
-              }
-            )
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+            })
           }).finally(res => {
-            
+
             wx.hideLoading()
           })
         }
@@ -132,20 +125,16 @@ Page({
           })
           leaveback(page.data.person.openId, page.data.booking.id).then(
             res => {
-              page.setData(
-                {
-                  success:'返回成功'
-                }
-              )
+              page.setData({
+                success: '返回成功'
+              })
             }
           ).catch(res => {
-            page.setData(
-              {
-                error:res.res &&res.res.data.msg? res.res.data.msg:'错误'
-              }
-            )
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+            })
           }).finally(res => {
-            
+
             wx.hideLoading()
           })
         }
@@ -165,20 +154,15 @@ Page({
           })
           cancel(page.data.person.openId, page.data.booking.id).then(
             res => {
-              page.setData(
-                {
-                  success:'取消成功'
-                }
-              )
+              page.setData({
+                success: '取消成功'
+              })
             }
           ).catch(res => {
-            page.setData(
-              {
-                error:res.res &&res.res.data.msg? res.res.data.msg:'错误'
-              }
-            )
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+            })
           }).finally(res => {
-            
             wx.hideLoading()
           })
         }

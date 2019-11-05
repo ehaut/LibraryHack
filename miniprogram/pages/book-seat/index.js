@@ -6,14 +6,14 @@ Page({
    */
   data: {
     regions: [],
-    position:{},
+    position: {},
     seats: [],
     date: "",
     error: '',
     success: '',
     next: true,//代表是否能进入下一步
     scroll_height: 0,
-    person:{}
+    person: {}
   },
 
   /**
@@ -40,6 +40,10 @@ Page({
       layerid: region.buildingLayerId,
       regionid: region.id
     }
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
     getSeat(this.data.date, this.data.position).then(res => {
       for (let e in res.list) {
         if (res.list[e].isCan == "1") {
@@ -61,46 +65,56 @@ Page({
         {
           error: '获取座位失败'
         }
-      )})
-  },
-  book(e)
-  {
-    let seat = e.currentTarget.dataset.seat
-    bookSeat(this.data.date, this.data.position, this.data.person.openId,seat.id ).then(res=>
+      )
+    }).finally(res=>
     {
-      if(res.code==0)
-      {
+      wx.hideLoading()
+    })
+  },
+  book(e) {
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    let seat = e.currentTarget.dataset.seat
+    bookSeat(this.data.date, this.data.position, this.data.person.openId, seat.id).then(res => {
+      if (res.code == 0) {
         this.setData(
           {
             success: '预定成功'
           }
         )
       }
-      else
-      {
+      else {
         this.setData(
           {
-            error: res.res && res.res.data.msg? res.res.data.msg:'错误'
+            error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
           }
         )
       }
-    }).catch(res=>
-    {
+    }).catch(res => {
       this.setData(
         {
-          error: res.res &&res.res.data.msg ? res.res.data.msg:"错误"
+          error: res.res && res.res.data.msg ? res.res.data.msg : "错误"
         }
       )
+    }).finally(res=>
+    {
+      wx.hideLoading()
     })
   },
-  getRegion()
-  {
+  getRegion() {
+
     this.setData(
       {
         next: true
       }
     )
     if (!this.data.date == "") {
+      wx.showLoading({
+        title: '加载中',
+        mask: true
+      })
       getRegion(this.data.date).then(res => {
         this.setData(
           {
@@ -111,17 +125,14 @@ Page({
         this.setData({
           error: '错误'
         })
-      }).finally()
-      {
-        wx.stopPullDownRefresh()
-      }
+      }).finally(res => {
+        wx.hideLoading()
+      })
     }
     else {
-      wx.stopPullDownRefresh()
       this.setData({
         error: '请先选择时间'
       })
-
     }
   }
 })

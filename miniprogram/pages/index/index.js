@@ -36,6 +36,7 @@ Page({
   redirect(e) {
     let person = e.currentTarget.dataset.person
     this.data.person = person;
+
     if (!this.data.admin) {
       this.setData(
         {
