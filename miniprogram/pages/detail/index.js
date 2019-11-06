@@ -1,4 +1,5 @@
 // miniprogram/pages/detail/index.js
+const app = getApp()
 Page({
 
   data: {
@@ -39,11 +40,6 @@ Page({
       this.setData({
         success: '未绑定微信号'
       })
-      // setTimeout(() => {
-      //   wx.navigateToMiniProgram({
-      //     appId: 'wx31f64ed54d4615c0',
-      //   })
-      // }, 1000)
     }
 
 
@@ -67,7 +63,7 @@ Page({
             },
             header: {
               "content-type": "application/json",
-              token: '',
+              token: app.globalData.token,
             },
             success(res) {
               page.data.person.breakNumber= 0
@@ -109,14 +105,23 @@ Page({
               },
               header: {
                 'content-type': "application/x-www-form-urlencoded",
-                token: '',
+                token: app.globalData.token,
               },
               success(res) {
-                page.data.person.openId = null
-                page.setData({
-                  success: '取消绑定成功',
-                  person: page.data.person
-                })
+                if(res.statusCode===200)
+                {
+                  page.data.person.openId = null
+                  page.setData({
+                    success: '取消绑定成功',
+                    person: page.data.person
+                  })
+                }
+                else
+                {
+                  page.setData({
+                    error: '取消绑定失败'
+                  })
+                }
               },
               fail(res) {
                 page.setData({

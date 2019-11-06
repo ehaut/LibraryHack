@@ -25,7 +25,7 @@ Page({
     ]
   },
 
-  onLoad: function () {
+  onLoad: function() {
     let windowHeight = wx.getSystemInfoSync().windowHeight // 屏幕的高度
     let windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕的宽度
     this.setData({
@@ -36,16 +36,11 @@ Page({
   redirect(e) {
     let person = e.currentTarget.dataset.person
     this.data.person = person;
-
     if (!this.data.admin) {
-      this.setData(
-        {
-          showEdit: true
-        }
-      )
-    }
-    else
-    {
+      this.setData({
+        showEdit: true
+      })
+    } else {
       wx.navigateTo({
         url: '/pages/detail/index',
       })
@@ -76,16 +71,14 @@ Page({
       showAdmin: false
     })
     wx.request({
-      url: 'https://lovelywhite.cn/pw.html',
+      url: 'https://lovelywhite.cn/pw',
       success(res) {
         if (res.data == e.detail) {
           page.setData({
             success: '管理员密码正确',
-            admin :true
+            admin: true
           })
-        }
-        else
-        {
+        } else {
           page.setData({
             error: '密码输入错误'
           })
@@ -98,23 +91,23 @@ Page({
       showAdmin: false
     })
   },
-  showInput: function () {
+  showInput: function() {
     this.setData({
       inputShowed: true
     });
   },
-  hideInput: function () {
+  hideInput: function() {
     this.setData({
       inputShowed: false
     });
     this.getUserlist()
   },
-  clearInput: function () {
+  clearInput: function() {
     this.setData({
       inputVal: ""
     });
   },
-  inputTyping: function (e) {
+  inputTyping: function(e) {
     this.setData({
       inputVal: e.detail.value
     });
@@ -131,7 +124,7 @@ Page({
         method: 'post',
         header: {
           "content-type": "application/x-www-form-urlencoded",
-          token: ''
+          token: app.globalData.token //'9a339eb3-df72-4750-86d9-ab022a1c1181'
         },
         data: {
           page: 1,
@@ -140,9 +133,25 @@ Page({
           userstr: this.data.inputVal
         },
         success(res) {
-          page.setData({
-            userlist: res.data.userlist
-          })
+          console.log(res)
+          if (res.data.userlist)
+            page.setData({
+              userlist: res.data.userlist
+            })
+          else {
+            if(res.data.code==401)
+            {
+              page.setData({
+                error: '异常！请联系作者'
+              })
+            } 
+            else
+            {
+              page.setData({
+                error: res.data.msg
+              })
+            }  
+          }
         },
         fail(res) {
           page.setData({
@@ -164,35 +173,27 @@ Page({
   showTip(e) {
     let tid = e.currentTarget.dataset.tid
     this.data.click[tid]++
-    if (this.data.click[0] == 4 && this.data.click[1] == 3 && this.data.click[2] == 2) {
-      this.setData(
-        {
+      if (this.data.click[0] == 4 && this.data.click[1] == 3 && this.data.click[2] == 2) {
+        this.setData({
           showAdmin: true
-        }
-      )
-    }
+        })
+      }
     if (this.data.click[0] + this.data.click[1] + this.data.click[2] == 9) {
-      this.setData(
-        {
-          success: this.data.tips[5]
-        }
-      )
+      this.setData({
+        success: this.data.tips[5]
+      })
       this.data.click = [0, 0, 0]
     }
     if (this.data.canTip) {
       this.data.canTip = false
-      this.setData(
-        {
-          success: this.data.tips[Math.floor(Math.random() * 10) % 5]
-        }
-      )
+      this.setData({
+        success: this.data.tips[Math.floor(Math.random() * 10) % 5]
+      })
     }
   },
   hide() {
-    this.setData(
-      {
-        canTip: true
-      }
-    )
+    this.setData({
+      canTip: true
+    })
   }
 })
