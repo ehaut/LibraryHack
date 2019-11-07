@@ -36,14 +36,15 @@ Page({
   redirect(e) {
     let person = e.currentTarget.dataset.person
     this.data.person = person;
+    wx.navigateTo({
+      url: '/pages/detail/index',
+    })
     if (!this.data.admin) {
       this.setData({
         showEdit: true
       })
     } else {
-      wx.navigateTo({
-        url: '/pages/detail/index',
-      })
+
     }
   },
   onInputConfirm(e) {

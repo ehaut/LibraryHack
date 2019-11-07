@@ -1,0 +1,12 @@
+/* miniprogram/pages/login/index.wxss */
+@import '../../style/weui.wxss';
+
+.login {
+  color: rgb(196, 163, 235) !important;
+  border: rgb(196, 163, 235) 1rpx solid;
+}
+
+.skip {
+  color: rgb(66, 206, 61) !important;
+  border: rgb(66, 206, 61)1rpx solid;
+}

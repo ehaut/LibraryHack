@@ -1,5 +1,6 @@
 //获取region
-export function getRegion(time) {
+
+export function getRegion(time, token) {
   return new Promise((resl, rej) => {
     let date = new Date(new Date().getTime() + 1200000);
     let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
@@ -8,7 +9,11 @@ export function getRegion(time) {
       method: 'get',
       data: {
         starttime: time + dateString,
-        endtime: time + ' 22: 00: 00'
+        endtime: time + ' 22: 00: 00',
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -39,7 +44,7 @@ export function getRegion(time) {
   })
 }
 //获取seat
-export function getSeat(time, position) {
+export function getSeat(time, position, token) {
   return new Promise((resl, rej) => {
     let date = new Date(new Date().getTime() + 1200000);
     let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
@@ -49,7 +54,11 @@ export function getSeat(time, position) {
         starttime: time + dateString,
         endtime: time + ' 22: 00: 00',
         layerid: position.layerid,
-        regionid: position.regionid
+        regionid: position.regionid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -80,7 +89,7 @@ export function getSeat(time, position) {
   })
 }
 //预定座位
-export function bookSeat(time, position, openid, seatid) {
+export function bookSeat(time, position, openid, seatid, token) {
   return new Promise((resl, rej) => {
     let date = new Date(new Date().getTime() + 1200000);
     let dateString = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
@@ -92,7 +101,11 @@ export function bookSeat(time, position, openid, seatid) {
         layerid: position.layerid,
         regionid: position.regionid,
         openid: openid,
-        seatid: seatid
+        seatid: seatid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -122,14 +135,18 @@ export function bookSeat(time, position, openid, seatid) {
     })
   })
 }
-export function getBooking(openid) {
+export function getBooking(openid, token) {
   return new Promise((resl, rej) => {
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/mybooking',
       data: {
         openid: openid,
         page: 1,
-        limit: 20
+        limit: 20,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -160,14 +177,18 @@ export function getBooking(openid) {
   })
 }
 //离开
-export function leave(openid, bookingid) {
+export function leave(openid, bookingid, token) {
   return new Promise((resl, rej) => {
 
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/leave',
       data: {
         openid: openid,
-        bookingid: bookingid
+        bookingid: bookingid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -199,18 +220,18 @@ export function leave(openid, bookingid) {
 }
 
 //返回
-export function leaveback(openid, bookingid) {
+export function leaveback(openid, bookingid, token) {
   return new Promise((resl, rej) => {
 
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/leaveBack',
       data: {
         openid: openid,
-        bookingid: bookingid
+        bookingid: bookingid,
       },
-      header: { //请求头
+      header: {
         "Content-Type": "application/json",
-        // "Content-Type": "application/x-www-form-urlencoded"
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -242,14 +263,18 @@ export function leaveback(openid, bookingid) {
 }
 
 //强制取消预约
-export function cancel(openid, bookingid) {
+export function cancel(openid, bookingid, token) {
   return new Promise((resl, rej) => {
 
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/cancel',
       data: {
         openid: openid,
-        bookingid: bookingid
+        bookingid: bookingid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -280,14 +305,18 @@ export function cancel(openid, bookingid) {
   })
 }
 //签到
-export function sign(openid, bookingid) {
+export function sign(openid, bookingid, token) {
   return new Promise((resl, rej) => {
 
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/signin',
       data: {
         openid: openid,
-        bookingid: bookingid
+        bookingid: bookingid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -318,13 +347,17 @@ export function sign(openid, bookingid) {
   })
 }
 //签退
-export function signoff(openid, bookingid) {
+export function signoff(openid, bookingid, token) {
   return new Promise((resl, rej) => {
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/signoff',
       data: {
         openid: openid,
-        bookingid: bookingid
+        bookingid: bookingid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
       },
       success(res) {
         if (res.statusCode == 200) {
@@ -356,92 +389,69 @@ export function signoff(openid, bookingid) {
 }
 //获取token
 export function getToken() {
-  let that = this
   return new Promise((resl, rej) => {
     const db = wx.cloud.database();
     db.collection("data").get({
       success(res) {
-        resl({
-          code: 0,
-          token: res.data[0].token
-        })
-        // if (res.data[0] && res.data[0].token && res.data[0].token != '') {
-          
-        // } else {
-
-        //    that.getTokenFromServer().then(res1 => {
-        //       db.collection("data").add({
-        //         data:
-        //         {
-        //           token: res1.data.token
-        //         },
-        //         success(res) {
-        //           resl({
-        //             code: 0,
-        //             token: res1.data.token
-        //           })
-        //         }
-        //       })
-        //    }).catch(res1 => {
-        //      console.log(111)
-        //       rej({ code: -1, res1 })
-        //     })
-        // }
+        if (res.data.length != 0) {
+          resl({
+            code: 0,
+            id: res.data[0]._id,
+            token: res.data[0].token,
+            account: res.data[0].account
+          })
+        } else {
+          rej({
+            code: -1,
+            token: res
+          })
+        }
       },
       fail(res) {
-        rej({ code: -1, res })
+        rej({
+          code: -1,
+          res
+        })
       }
     })
   })
 }
 
-// async function getTokenFromServer() {
-//   return new Promise((resl, rej) => {
-//     wx.request({
-//       url: 'https://lovelywhite.cn/user',
-//       success(res) {
-//         if (res.statusCode === 200) {
-//           console.log(res.data)
-//           let user = JSON.parse(ress.data)
-//           console.log(user)
-//           wx.request({
-//             url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/bindinguser',
-//             method: 'post',
-//             header: {
-//               "content-type": "application/x-www-form-urlencoded",
-//               token: ''
-//             },
-//             data: {
-//               openid: "o-HiL5UQ7JGvQLbOSJQPhL3vTNDc",
-//               username: user.username,
-//               password: user.password,
-//               only: parseInt(parseInt(new Date().getTime() / 1e3) / 60) * 176
-//             },
-//             success(res1) {
-//               if (res1.data.code && res1.data.code == 0) {
-//                resl({code: 0 , token:res1.da1.token})
-//               }
-//             },
-//             fail(res1) {
-//               rej({
-//                 code: -4,
-//                 res: res1
-//               })
-//             }
-//           })
-//         } else {
-//           rej({
-//             code: -5,
-//             res: res
-//           })
-//         }
-//       },
-//       fail(res) {
-//         rej({
-//           code: -6,
-//           res: res
-//         })
-//       }
-//     })
-//   })
-// }
+export function getTokenFromServer(openid, username, password) {
+  return new Promise((resl, rej) => {
+    wx.request({
+      url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/bindinguser',
+      method: 'post',
+      header: {
+        "content-type": "application/x-www-form-urlencoded",
+        token: ''
+      },
+      data: {
+        openid: openid,
+        username: username,
+        password: password,
+        only: parseInt(parseInt(new Date().getTime() / 1e3) / 60) * 176
+      },
+      success(res) {
+        console.log(res)
+        if (0 == res.data.code) {
+          resl({
+            code: 0,
+            token: res.data.data.token
+          })
+        } else {
+          resl({
+            code: -1,
+            res: res
+          })
+        }
+      },
+      fail(res) {
+        rej({
+          code: -2,
+          res: res
+        })
+      }
+    })
+  })
+}

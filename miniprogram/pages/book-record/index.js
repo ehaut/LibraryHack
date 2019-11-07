@@ -1,6 +1,7 @@
 const {
   getBooking
 } = require('../../common/region.js')
+const app = getApp()
 Page({
 
   /**
@@ -36,12 +37,13 @@ Page({
       title: '加载中',
       mask: true
     })
-    getBooking(this.data.person.openId).then(res => {
+    getBooking(this.data.person.openId,app.globalData.token).then(res => {
       console.log(res)
       this.setData({
         bookings: res.res.data.page.list
       })
     }).catch(res => {
+      console.log(res)
       this.setData({
         error: '错误'
       })

@@ -1,4 +1,5 @@
 const { getRegion, getSeat, bookSeat } = require('../../common/region.js')
+const app = getApp()
 Page({
 
   /**
@@ -44,7 +45,7 @@ Page({
       title: '加载中',
       mask: true
     })
-    getSeat(this.data.date, this.data.position).then(res => {
+    getSeat(this.data.date, this.data.position,app.globalData.token).then(res => {
       for (let e in res.list) {
         if (res.list[e].isCan == "1") {
           this.data.seats.push(res.list[e])
@@ -77,7 +78,7 @@ Page({
       mask: true
     })
     let seat = e.currentTarget.dataset.seat
-    bookSeat(this.data.date, this.data.position, this.data.person.openId, seat.id).then(res => {
+    bookSeat(this.data.date, this.data.position, this.data.person.openId, seat.id,app.globalData.token).then(res => {
       if (res.code == 0) {
         this.setData(
           {
@@ -115,7 +116,7 @@ Page({
         title: '加载中',
         mask: true
       })
-      getRegion(this.data.date).then(res => {
+      getRegion(this.data.date,app.globalData.token).then(res => {
         this.setData(
           {
             regions: res.list

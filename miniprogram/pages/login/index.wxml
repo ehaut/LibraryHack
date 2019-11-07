@@ -1,0 +1,15 @@
+<mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
+<mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<mp-form>
+  <mp-cells title="登录" footer="{{tip}}">
+    <mp-cell prop="qq" title="学号" ext-class="weui-cell_vcode">
+      <input bindchange="bindAccountChange" class="weui-input" placeholder="请输入学号" />
+    </mp-cell>
+    <mp-cell prop="qq" title="密码" ext-class="weui-cell_vcode">
+      <input bindchange="bindPasswordChange" type="password" data-password="password" class="weui-input" placeholder="请输入密码"/>
+    </mp-cell>
+  </mp-cells>
+</mp-form>
+<view class="weui-btn-area">
+  <button class="weui-btn login" type="default" bindtap="login" hidden="{{isLogin}}">登录</button>
+</view>

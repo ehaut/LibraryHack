@@ -5,15 +5,15 @@ Page({
   data: {
     person: {},
     error: '',
-    success: ''
+    success: '',
+    id:''
   },
   onLoad(e) {
     let pages = getCurrentPages()
-    this.setData(
-      {
-        person:pages[pages.length - 2].data.person
-      }
-    )
+    this.setData({
+      person: pages[pages.length - 2].data.person,
+      id: pages[pages.length - 2].data.id,
+    })
     if (this.data.person.username == '201612010124') {
       this.setData({
         success: '欢迎小喵酱使用软件！！！'
@@ -29,9 +29,7 @@ Page({
           url: '/pages/book-seat/index',
         })
 
-      }
-      else if(fromwhere == 'bookrecord')
-      {
+      } else if (fromwhere == 'bookrecord') {
         wx.navigateTo({
           url: '/pages/book-record/index',
         })
@@ -41,8 +39,6 @@ Page({
         success: '未绑定微信号'
       })
     }
-
-
   },
   clear() {
     let page = this
@@ -66,7 +62,7 @@ Page({
               token: app.globalData.token,
             },
             success(res) {
-              page.data.person.breakNumber= 0
+              page.data.person.breakNumber = 0
               page.setData({
                 success: '清空违约成功',
                 person: page.data.person
@@ -108,16 +104,23 @@ Page({
                 token: app.globalData.token,
               },
               success(res) {
-                if(res.statusCode===200)
-                {
+                if (res.statusCode === 200) {
                   page.data.person.openId = null
+                  let pages = getCurrentPages()
+                  pages[pages.length - 2].data.isLogin=false
                   page.setData({
                     success: '取消绑定成功',
                     person: page.data.person
                   })
-                }
-                else
-                {
+                  const db = wx.cloud.database()
+                  try {
+                    db.collection('data').doc(page.data.id).remove()
+                  } catch (e) {
+                    console.log(e)
+                  }
+                  wx.navigateBack({
+                  })
+                } else {
                   page.setData({
                     error: '取消绑定失败'
                   })

@@ -4,9 +4,9 @@ let {
   leaveback,
   cancel,
   sign,
-  signoff,
-  keepon
+  signoff
 } = require('../../common/region.js')
+const app = getApp()
 Page({
 
   data: {
@@ -35,7 +35,7 @@ Page({
             title: '处理中',
             mask: true
           })
-          sign(page.data.person.openId, page.data.booking.id).then(
+          sign(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
             res => {
               page.setData({
                 success: '签到成功'
@@ -64,7 +64,7 @@ Page({
             title: '处理中',
             mask: true
           })
-          signoff(page.data.person.openId, page.data.booking.id).then(
+          signoff(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
             res => {
               page.setData({
                 success: '签退成功'
@@ -123,7 +123,7 @@ Page({
             title: '处理中',
             mask: true
           })
-          leaveback(page.data.person.openId, page.data.booking.id).then(
+          leaveback(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
             res => {
               page.setData({
                 success: '返回成功'
@@ -152,7 +152,7 @@ Page({
             title: '处理中',
             mask: true
           })
-          cancel(page.data.person.openId, page.data.booking.id).then(
+          cancel(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
             res => {
               page.setData({
                 success: '取消成功'
