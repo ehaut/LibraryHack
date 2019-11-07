@@ -3,10 +3,10 @@
 <mp-form>
   <mp-cells title="登录" footer="{{tip}}">
     <mp-cell prop="qq" title="学号" ext-class="weui-cell_vcode">
-      <input bindchange="bindAccountChange" class="weui-input" placeholder="请输入学号" />
+      <input bindinput="bindAccountChange" class="weui-input" value="{{id}}" placeholder="请输入学号" />
     </mp-cell>
     <mp-cell prop="qq" title="密码" ext-class="weui-cell_vcode">
-      <input bindchange="bindPasswordChange" type="password" data-password="password" class="weui-input" placeholder="请输入密码"/>
+      <input  bindinput="bindPasswordChange" type="password" data-password="password" value="{{password}}" class="weui-input" placeholder="请输入密码"/>
     </mp-cell>
   </mp-cells>
 </mp-form>
