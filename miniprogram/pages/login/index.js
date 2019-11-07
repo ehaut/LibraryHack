@@ -160,7 +160,7 @@ Page({
                     page.data.person = res3.person,
                       page.data.id = res2._id
                     page.setData({
-                      isLogin: false
+                      isLogin: true
                     })
                     wx.navigateTo({
                       url: '/pages/detail/index',
