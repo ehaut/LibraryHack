@@ -33,18 +33,19 @@ Page({
     this.getBook()
   },
   getBook() {
+    let page = this
     wx.showLoading({
       title: '加载中',
       mask: true
     })
     getBooking(this.data.person.openId,app.globalData.token).then(res => {
       console.log(res)
-      this.setData({
+      page.setData({
         bookings: res.res.data.page.list
       })
     }).catch(res => {
       console.log(res)
-      this.setData({
+      page.setData({
         error: '错误'
       })
     }).finally(res => {

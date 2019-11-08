@@ -225,6 +225,7 @@ export function leaveback(openid, bookingid, token) {
 
     wx.request({
       url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/leaveBack',
+      method:'post',
       data: {
         openid: openid,
         bookingid: bookingid,

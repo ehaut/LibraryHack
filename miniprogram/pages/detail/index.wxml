@@ -1,7 +1,7 @@
 <mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
 <mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
 <view>
-  <mp-cells ext-class="my-cells" title="当前选择的用户：{{person.displayname}}">
+  <mp-cells ext-class="my-cells" title="当前用户：{{person.displayname}}">
     <mp-cell hover value="清空违约" bindtap="clear" footer="已违约 {{person.breakNumber}} 次"></mp-cell>
     <mp-cell hover value="消除关联" footer="{{person.openId?person.openId:'当前无微信关联'}}" bindtap="disp"></mp-cell>
     <mp-cell bindtap="redirect" link hover value="预约记录" data-fromwhere='bookrecord'></mp-cell>

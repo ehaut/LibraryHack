@@ -36,6 +36,7 @@ Page({
     this.getRegion()
   },
   redirect(e) {
+    let page = this
     let region = e.currentTarget.dataset.region
     this.data.position = {
       layerid: region.buildingLayerId,
@@ -45,67 +46,78 @@ Page({
       title: '加载中',
       mask: true
     })
-    getSeat(this.data.date, this.data.position,app.globalData.token).then(res => {
+    getSeat(page.data.date, page.data.position, app.globalData.token).then(res => {
       for (let e in res.list) {
         if (res.list[e].isCan == "1") {
-          this.data.seats.push(res.list[e])
+          page.data.seats.push(res.list[e])
         }
       }
-      this.setData(
+      page.setData(
         {
           next: false,
         }
       )
-      this.setData(
+      page.setData(
         {
-          seats: this.data.seats
+          seats: page.data.seats
         }
       )
     }).catch(res => {
-      this.setData(
+      page.setData(
         {
           error: '获取座位失败'
         }
       )
-    }).finally(res=>
-    {
+    }).finally(res => {
       wx.hideLoading()
     })
   },
   book(e) {
-    wx.showLoading({
-      title: '加载中',
-      mask: true
-    })
-    let seat = e.currentTarget.dataset.seat
-    bookSeat(this.data.date, this.data.position, this.data.person.openId, seat.id,app.globalData.token).then(res => {
-      if (res.code == 0) {
-        this.setData(
-          {
-            success: '预定成功'
-          }
-        )
-      }
-      else {
-        this.setData(
-          {
-            error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
-          }
-        )
-      }
-    }).catch(res => {
-      this.setData(
+
+    let page = this
+    wx.showModal({
+      title: '提示',
+      content: '您即将预定,确定？',
+      success(res) {
+        if(res.confirm)
         {
-          error: res.res && res.res.data.msg ? res.res.data.msg : "错误"
+          wx.showLoading({
+            title: '加载中',
+            mask: true
+          })
+          let seat = e.currentTarget.dataset.seat
+          bookSeat(page.data.date, page.data.position, page.data.person.openId, seat.id, app.globalData.token).then(res => {
+            if (res.code == 0) {
+              page.setData(
+                {
+                  success: '预定成功'
+                }
+              )
+            }
+            else {
+              page.setData(
+                {
+                  error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+                }
+              )
+            }
+          }).catch(res => {
+            page.setData(
+              {
+                error: res.res && res.res.data.msg ? res.res.data.msg : "错误"
+              }
+            )
+          }).finally(res => {
+            wx.hideLoading()
+          })
         }
-      )
-    }).finally(res=>
-    {
-      wx.hideLoading()
+      }
     })
+
+
   },
   getRegion() {
-
+    let page = this
     this.setData(
       {
         next: true
@@ -116,14 +128,14 @@ Page({
         title: '加载中',
         mask: true
       })
-      getRegion(this.data.date,app.globalData.token).then(res => {
-        this.setData(
+      getRegion(page.data.date, app.globalData.token).then(res => {
+        page.setData(
           {
             regions: res.list
           }
         )
       }).catch(res => {
-        this.setData({
+        page.setData({
           error: '错误'
         })
       }).finally(res => {
@@ -131,7 +143,7 @@ Page({
       })
     }
     else {
-      this.setData({
+      page.setData({
         error: '请先选择时间'
       })
     }
