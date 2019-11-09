@@ -40,16 +40,16 @@ Page({
     })
     getBooking(this.data.person.openId,app.globalData.token).then(res => {
       console.log(res)
+      wx.hideLoading()
       page.setData({
         bookings: res.res.data.page.list
       })
     }).catch(res => {
       console.log(res)
+      wx.hideLoading()
       page.setData({
         error: '错误'
       })
-    }).finally(res => {
-      wx.hideLoading()
     })
   },
   redirect(e) {

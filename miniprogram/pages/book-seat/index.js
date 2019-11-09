@@ -47,6 +47,7 @@ Page({
       mask: true
     })
     getSeat(page.data.date, page.data.position, app.globalData.token).then(res => {
+      wx.hideLoading()
       for (let e in res.list) {
         if (res.list[e].isCan == "1") {
           page.data.seats.push(res.list[e])
@@ -63,13 +64,12 @@ Page({
         }
       )
     }).catch(res => {
+      wx.hideLoading()
       page.setData(
         {
           error: '获取座位失败'
         }
       )
-    }).finally(res => {
-      wx.hideLoading()
     })
   },
   book(e) {
@@ -87,6 +87,7 @@ Page({
           })
           let seat = e.currentTarget.dataset.seat
           bookSeat(page.data.date, page.data.position, page.data.person.openId, seat.id, app.globalData.token).then(res => {
+            wx.hideLoading()
             if (res.code == 0) {
               page.setData(
                 {
@@ -102,13 +103,12 @@ Page({
               )
             }
           }).catch(res => {
+            wx.hideLoading()
             page.setData(
               {
                 error: res.res && res.res.data.msg ? res.res.data.msg : "错误"
               }
             )
-          }).finally(res => {
-            wx.hideLoading()
           })
         }
       }
@@ -129,17 +129,17 @@ Page({
         mask: true
       })
       getRegion(page.data.date, app.globalData.token).then(res => {
+        wx.hideLoading()
         page.setData(
           {
             regions: res.list
           }
         )
       }).catch(res => {
+        wx.hideLoading()
         page.setData({
           error: '错误'
         })
-      }).finally(res => {
-        wx.hideLoading()
       })
     }
     else {

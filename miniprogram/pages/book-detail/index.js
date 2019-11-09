@@ -35,8 +35,9 @@ Page({
             title: '处理中',
             mask: true
           })
-          sign(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
+          sign(page.data.person.openId, page.data.booking.id, app.globalData.token).then(
             res => {
+              wx.hideLoading()
               console.log(res)
               page.setData({
                 success: '签到成功'
@@ -44,13 +45,10 @@ Page({
             }
           ).catch(res => {
             console.log(res)
+            wx.hideLoading()
             page.setData({
               error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
             })
-          }).finally(res => {
-
-
-            wx.hideLoading()
           })
         }
       }
@@ -67,8 +65,9 @@ Page({
             title: '处理中',
             mask: true
           })
-          signoff(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
+          signoff(page.data.person.openId, page.data.booking.id, app.globalData.token).then(
             res => {
+              wx.hideLoading()
               console.log(res)
               page.setData({
                 success: '签退成功'
@@ -76,12 +75,11 @@ Page({
             }
           ).catch(res => {
             console.log(res)
+            wx.hideLoading()
             page.setData({
               error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
             })
 
-          }).finally(res => {
-            wx.hideLoading()
           })
         }
       }
@@ -98,20 +96,20 @@ Page({
             title: '处理中',
             mask: true
           })
-          leave(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
+          leave(page.data.person.openId, page.data.booking.id, app.globalData.token).then(
             res => {
               console.log(res)
+              wx.hideLoading()
               page.setData({
                 success: '离开成功'
               })
             }
           ).catch(res => {
             console.log(res)
+            wx.hideLoading()
             page.setData({
               error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
             })
-          }).finally(res => {
-            wx.hideLoading()
           })
         }
       }
@@ -128,20 +126,20 @@ Page({
             title: '处理中',
             mask: true
           })
-          leaveback(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
+          leaveback(page.data.person.openId, page.data.booking.id, app.globalData.token).then(
             res => {
               console.log(res)
+              wx.hideLoading()
               page.setData({
                 success: '返回成功'
               })
             }
           ).catch(res => {
             console.log(res)
+            wx.hideLoading()
             page.setData({
               error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
             })
-          }).finally(res => {
-            wx.hideLoading()
           })
         }
       }
@@ -158,20 +156,20 @@ Page({
             title: '处理中',
             mask: true
           })
-          cancel(page.data.person.openId, page.data.booking.id,app.globalData.token).then(
+          cancel(page.data.person.openId, page.data.booking.id, app.globalData.token).then(
             res => {
               console.log(res)
+              wx.hideLoading()
               page.setData({
                 success: '取消成功'
               })
             }
           ).catch(res => {
             console.log(res)
+            wx.hideLoading()
             page.setData({
               error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
             })
-            }).finally(res => {
-            wx.hideLoading()
           })
         }
       }
