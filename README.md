@@ -3,7 +3,6 @@
 <div style="text-align:center">
 
 ![小程序码](./pic/ocr.jpg)
-<p>小程序体验码</p>
 </div>
 
 ## 整体介绍
