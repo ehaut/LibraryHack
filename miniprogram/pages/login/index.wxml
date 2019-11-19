@@ -8,6 +8,7 @@
     <mp-cell title="密码" ext-class="weui-cell_vcode">
       <input  bindinput="bindPasswordChange" type="password"  class="weui-input" placeholder="请输入密码"/>
     </mp-cell>
+    <mp-cell footer="@苏西网络科技工作室"></mp-cell>
   </mp-cells>
 </mp-form>
 <view class="weui-btn-area">
