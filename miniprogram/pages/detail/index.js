@@ -1,4 +1,8 @@
 // miniprogram/pages/detail/index.js
+import {
+  getBooking,
+  bookSeat
+} from "../../common/region.js"
 const app = getApp()
 Page({
 
@@ -6,9 +10,21 @@ Page({
     person: {},
     error: '',
     success: '',
-    id:''
+    id: '',
+    last: {}, //上一次预约
+    layer: {
+      '三': 3,
+      '四': 4,
+      '五': 5,
+      '六': 6,
+      '七': 7,
+      '八': 8,
+      '九': 9,
+      '十': 10
+    }
   },
   onLoad(e) {
+    let page = this
     let pages = getCurrentPages()
     this.setData({
       person: pages[pages.length - 2].data.person,
@@ -20,6 +36,21 @@ Page({
       })
     }
     console.log(this.data.person)
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    //获取上一次的座位
+    getBooking(this.data.person.openId, app.globalData.token).then(res => {
+      console.log(res)
+      page.setData({
+        last: res.res.data.page.list && res.res.data.page.list.length != 0 ? res.res.data.page.list[0] : []
+      })
+      wx.hideLoading()
+    }).catch(res => {
+      console.log(res)
+      wx.hideLoading()
+    })
   },
   redirect(e) {
     let fromwhere = e.currentTarget.dataset.fromwhere
@@ -107,18 +138,27 @@ Page({
                 if (res.statusCode === 200) {
                   page.data.person.openId = null
                   let pages = getCurrentPages()
-                  pages[pages.length - 2].data.isLogin=false
-                  page.setData({
-                    success: '取消绑定成功',
-                    person: page.data.person
-                  })
+                  pages[pages.length - 2].data.isLogin = false
                   const db = wx.cloud.database()
-                  try {
-                    db.collection('data').doc(page.data.id).remove()
-                  } catch (e) {
+                  db.collection('data').doc(page.data.id).remove().then(
+                    e => {
+                      page.setData({
+                        success: '取消绑定成功',
+                        person: page.data.person
+                      })
+                      setTimeout(() => {
+                        wx.navigateBack({})
+                      }, 600);
+                    }
+                  ).catch(e => {
+                    page.setData({
+                      success: '成功，数据库无记录',
+                      person: page.data.person
+                    })
+                    setTimeout(() => {
+                      wx.navigateBack({})
+                    }, 600);
                     console.log(e)
-                  }
-                  wx.navigateBack({
                   })
                 } else {
                   page.setData({
@@ -143,5 +183,43 @@ Page({
         error: '未绑定微信号'
       })
     }
-  }
+  },
+  book() {
+    let page = this
+    wx.showModal({
+      title: '提示',
+      content: '您即将预定,确定？',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '加载中',
+            mask: true
+          })
+          let date = new Date();
+          console.log(page.data.layer[page.data.last.regionName[0]])
+          let position = {
+            layerid: page.data.layer[page.data.last.regionName[0]],
+            regionid: page.data.last.buildingLayerRegionId
+          }
+          bookSeat(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(), position, page.data.person.openId, page.data.last.seatId, app.globalData.token).then(res => {
+            wx.hideLoading()
+            if (res.code == 0) {
+              page.setData({
+                success: '预定成功'
+              })
+            } else {
+              page.setData({
+                error: res.res && res.res.data.msg ? res.res.data.msg : '错误'
+              })
+            }
+          }).catch(res => {
+            wx.hideLoading()
+            page.setData({
+              error: res.res && res.res.data.msg ? res.res.data.msg : "错误"
+            })
+          })
+        }
+      }
+    })
+  },
 })

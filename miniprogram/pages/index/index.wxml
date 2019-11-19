@@ -1,7 +1,3 @@
-<inputBox title='为了安全起见请输入密码' placeholder='密码' maxlength='30' bindinputConfirm='onInputConfirm' bindinputCancel='onInputCancel' wx:if='{{ showEdit }}'>
-</inputBox>
-<inputBox title='管理员密码' placeholder='密码' maxlength='30' bindinputConfirm='adminConfirm' bindinputCancel='adminCancel' wx:if='{{ showAdmin }}'>
-</inputBox>
 <mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}" bindhide='hide'></mp-toptips>
 <mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
 <view class="weui-search-bar">
@@ -25,19 +21,19 @@
     <view>
       <view>{{item.displayname}}</view>
       <view>{{item.username}}</view>
-      <view class='password' wx:if="{{admin}}">{{item.password}}</view>
+      <view class='password'>{{item.password}}</view>
     </view>
     <mp-icon icon="arrow" color="grey"></mp-icon>
   </view>
 </scroll-view>
 <view wx:else>
-  <view class="scroll" bindtap="showTip" data-tid='0' style="justify-content:center;color:#CDC1C5">
-    输入学号/姓名查找你的信息
+  <view class="scroll" style="justify-content:center;color:#CDC1C5">
+    输入学号/姓名查找信息
   </view>
-  <view class="scroll" bindtap="showTip" data-tid='1' style="justify-content:center;color:#FF6A6A">
+  <view class="scroll" style="justify-content:center;color:#FF6A6A">
     当前列表为空
   </view>
-  <view class="scroll" bindtap="showTip" data-tid='2' style="justify-content:flex-end;color:#FFBBFF">
-    Util by Lovelywhite
+  <view class="scroll" style="justify-content:flex-end;color:#FFBBFF">
+    管理员Utils
   </view>
 </view>

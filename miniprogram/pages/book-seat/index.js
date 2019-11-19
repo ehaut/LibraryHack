@@ -73,7 +73,6 @@ Page({
     })
   },
   book(e) {
-
     let page = this
     wx.showModal({
       title: '提示',
@@ -120,6 +119,8 @@ Page({
     let page = this
     this.setData(
       {
+        region:[],
+        seats:[],
         next: true
       }
     )

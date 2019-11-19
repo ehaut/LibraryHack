@@ -1,11 +1,21 @@
 <mp-toptips msg="{{success}}" type="success" delay="1000" show="{{success}}"></mp-toptips>
 <mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
+<scroll-view scroll-y style='height:100%'>
 <view>
   <mp-cells ext-class="my-cells" title="当前用户：{{person.displayname}}">
     <mp-cell hover value="清空违约" bindtap="clear" footer="已违约 {{person.breakNumber}} 次"></mp-cell>
     <mp-cell hover value="消除关联" footer="{{person.openId?person.openId:'当前无微信关联'}}" bindtap="disp"></mp-cell>
     <mp-cell bindtap="redirect" link hover value="预约记录" data-fromwhere='bookrecord'></mp-cell>
     <mp-cell bindtap="redirect" link hover value="座位预约" data-fromwhere='bookseat'></mp-cell>
+    <block wx:if="{{last.length!=0}}">
+      <mp-cell bindtap="book" hover value="快速预约" data-fromwhere='bookseat' footer="{{last.seatName}}"></mp-cell>
+    </block>
+    <block wx:else>
+      <mp-cell value="快速预约" data-fromwhere='bookseat' footer="您当前无预约记录"></mp-cell>
+    </block>
+     <mp-cell value="提前预约" data-fromwhere='bookseat' footer="开发中..."></mp-cell>
     <mp-cell value="更多功能开发中" footer='github.com/lovelywhite'></mp-cell>
+     <mp-cell value="" footer='@苏西网络科技工作室 v1.0.2'></mp-cell>
   </mp-cells>
 </view>
+</scroll-view>

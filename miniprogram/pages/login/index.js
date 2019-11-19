@@ -34,6 +34,7 @@ Page({
     })
     wx.showLoading({
       title: '检查云端token',
+      mask:true
     })
     getToken().then(res => {
       console.log(res.token, res.id)
@@ -53,7 +54,12 @@ Page({
         wx.hideLoading()
         const db = wx.cloud.database()
         try {
-          db.collection('data').doc(page.data.id).remove()
+          db.collection('data').doc(res.id).remove()
+          page.setData(
+            {
+              isLogin:false
+            }
+          )
         } catch (e) {
           console.log(e)
         }
@@ -104,7 +110,52 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    let page = this
+    wx.showLoading({
+      title: '检查云端token',
+      mask:true
+    })
+    getToken().then(res => {
+      console.log(res.token, res.id)
+      app.globalData.token = res.token
+      page.getUser(res.id).then(res1 => {
+        page.data.person = res1.person
+        page.data.id = res.id
+        wx.navigateTo({
+          url: '/pages/detail/index',
+          success(res2) {
+            wx.hideLoading()
+            wx.stopPullDownRefresh()
+          }
+        })
+      }).catch(res1 => {
+        console.log(res1)
+        wx.hideLoading()
+        wx.stopPullDownRefresh()
+        const db = wx.cloud.database()
+        try {
+          db.collection('data').doc(res.id).remove()
+          page.setData(
+            {
+              isLogin: false
+            }
+          )
+        } catch (e) {
+          console.log(e)
+        }
+        page.setData({
+          error: res1.res.data.msg ? res1.res.data.msg : "错误"
+        })
+      })
+    }).catch(res => {
+      wx.hideLoading()
+      wx.stopPullDownRefresh()
+      console.log(res)
+      page.setData({
+        error: "请登录",
+        isLogin: false
+      })
+    })
   },
 
   /**
@@ -144,6 +195,7 @@ Page({
       wx.cloud.callFunction({
         name: 'login',
         success(res) {
+          console.log(res)
           getTokenFromServer(res.result.openid, page.data.id, page.data.password).then(res1 => {
             console.log(res1)
             if (0 == res1.code) {
