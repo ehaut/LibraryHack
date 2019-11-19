@@ -25,7 +25,7 @@
 ```txt
     本程序主要的函数都在/common/region.js 文件中
 ```
-|函数| 解释|
+|函数|解释|
 |:-------------:|:-------------:|
 |getRegion(time, token)|得到区域列表
 |getSeat(time, position, token)|获取座位列表
@@ -40,6 +40,87 @@
 |getTokenFromServer(openid, username, password)|重新获取token
 |getUserAdmin(username,token)|获取用户列表
 |disp()|取消绑定
+
+## 官方API列表
+
+```javascrpit
+ domain_url: "https://wplib.haut.edu.cn/seatbook/",
+    apiList: {
+        login: "api/seatbook/bindinguser",
+        queryOpenId: "api/seatbook/openid",
+        getuserinfo: "api/seatbook/userinfo",
+        unbinduser: "api/seatbook/unbindinguser",
+        getregionList: "api/seatbook/region",
+        getseatList: "api/seatbook/query",
+        addbooking: "api/seatbook/addbooking",
+        mybooking: "api/seatbook/mybooking",
+        signin: "api/seatbook/signin",
+        signoff: "api/seatbook/signoff",
+        leave: "api/seatbook/leave",
+        leaveBack: "api/seatbook/leaveBack",
+        keepon: "api/seatbook/keepon",
+        cancelbooking: "api/seatbook/cancel",
+        randomseat: "api/seatbook/random",
+        bookingrule: "api/seatbook/rule",
+        bookinginfo: "api/seatbook/bookinginfo",
+        bookingrules: "api/sbookadmin/rulelist",
+        regionlist: "api/sbookadmin/regionlist",
+        regionop: "api/sbookadmin/regionoc",
+        userlist: "api/sbookadmin/userlist",
+        clearall: "api/sbookadmin/clearall",
+        clearone: "api/sbookadmin/clearone",
+        bookinglist: "api/sbookadmin/bookinglist",
+        editrule: "api/sbookadmin/uprule",
+        cancelbooking_admin: "api/sbookadmin/cancel",
+        beaconlist: "api/seatbook/beacon",
+        breakbooking: "api/seatbook/disobey"
+```
+
+## request示例
+
+```javascript
+wx.request({
+      url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/addbooking',
+      data: {
+        starttime: time + dateString,
+        endtime: time + ' 22: 00: 00',
+        layerid: position.layerid,
+        regionid: position.regionid,
+        openid: openid,
+        seatid: seatid,
+      },
+      header: {
+        "Content-Type": "application/json",
+        token: token
+      },
+      success(res) {
+        if (res.statusCode == 200) {
+          if (res.data.code == 0) {
+            return resl({
+              code: 0,
+              res: res
+            })
+          } else
+            return rej({
+              code: -1,
+              res: res
+            })
+        } else {
+          return rej({
+            code: -1,
+            res: res
+          })
+        }
+      },
+      fail(res) {
+        return rej({
+          code: -1,
+          res: res
+        })
+      }
+    })
+  })
+```
 
 ## 程序展示图
 
