@@ -1,7 +1,8 @@
 // miniprogram/pages/detail/index.js
 import {
   getBooking,
-  bookSeat
+  bookSeat,
+  getUserAdmin
 } from "../../common/region.js"
 const app = getApp()
 Page({
@@ -82,35 +83,59 @@ Page({
             title: '处理中',
             mask: true
           })
-          wx.request({
-            url: 'https://wplib.haut.edu.cn/seatbook/api/sbookadmin/clearone',
-            method: 'get',
-            data: {
-              userid: page.data.person.userId
-            },
-            header: {
-              "content-type": "application/json",
-              token: app.globalData.token,
-            },
-            success(res) {
-              page.data.person.breakNumber = 0
-              page.setData({
-                success: '清空违约成功',
-                person: page.data.person
+          getUserAdmin(page.data.person.username, app.globalData.token).then(res1 => {
+            console.log(res1)
+            page.data.person = res1.person
+            if (page.data.person.userId) {
+              wx.request({
+                url: 'https://wplib.haut.edu.cn/seatbook/api/sbookadmin/clearone',
+                method: 'get',
+                data: {
+                  userid: page.data.person.userId
+                },
+                header: {
+                  "content-type": "application/json",
+                  token: app.globalData.token,
+                },
+                success(res2) {
+                  console.log(res2)
+                  if (res2.statusCode == 200 && res2.data.code == 0) {
+                    page.data.person.breakNumber = 0
+                    page.setData({
+                      success: '清空违约成功',
+                      person: page.data.person
+                    })
+                  }
+                  else {
+                    page.setData({
+                      error: res2.data.msg ? res2.data.msg : '清空违约失败'
+                    })
+                  }
+                },
+                fail(res2) {
+                  page.setData({
+                    error: '清空违约失败'
+                  })
+                },
+                complete(res2) {
+                  wx.hideLoading()
+                }
               })
-            },
-            fail(res) {
-              page.setData({
-                error: '清空违约失败'
-              })
-            },
-            complete(res) {
-              wx.hideLoading()
             }
+            else {
+              page.setData({
+                error: 'userId获取失败'
+              })
+            }
+
+          }).catch(res1 => {
+
           })
+
         }
       }
     })
+
   },
   disp() {
     let page = this
@@ -221,5 +246,5 @@ Page({
         }
       }
     })
-  },
+  }
 })

@@ -399,7 +399,7 @@ export function getToken() {
             code: 0,
             id: res.data[0]._id,
             token: res.data[0].token,
-            account: res.data[0].account
+            openid: res.data[0]._openid
           })
         } else {
           rej({
@@ -453,6 +453,46 @@ export function getTokenFromServer(openid, username, password) {
           res: res
         })
       }
+    })
+  })
+}
+
+export function getUserAdmin(username,token) {
+  return new Promise((resl, rej) => {
+    wx.request({
+      url: 'https://wplib.haut.edu.cn/seatbook/api/sbookadmin/userlist',
+      method: 'post',
+      header: {
+        "content-type": "application/x-www-form-urlencoded",
+        token: token
+      },
+      data: {
+        page: 1,
+        limit: 1,
+        bookingstatus: '',
+        userstr: username
+      },
+      success(res) {
+        console.log(res)
+        if (res.data.userlist)
+          resl({
+            code: 0,
+            person: res.data.userlist[0]
+          })
+        else {
+          rej({
+            code: -1,
+            res: res
+          })
+        }
+      },
+      fail(res) {
+        rej({
+          code: -2,
+          res: res
+        })
+      },
+      complete() { }
     })
   })
 }

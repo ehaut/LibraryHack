@@ -59,7 +59,7 @@ Page({
         method: 'post',
         header: {
           "content-type": "application/x-www-form-urlencoded",
-          token: app.globalData.token 
+          token: app.globalData.token
         },
         data: {
           page: 1,
@@ -74,18 +74,15 @@ Page({
               userlist: res.data.userlist
             })
           else {
-            if(res.data.code==401)
-            {
+            if (res.data.code == 401) {
               page.setData({
                 error: '异常！请联系作者'
               })
-            } 
-            else
-            {
+            } else {
               page.setData({
                 error: res.data.msg
               })
-            }  
+            }
           }
         },
         fail(res) {
@@ -104,5 +101,47 @@ Page({
         error: '请输入学号/姓名'
       })
     }
+  },
+  disp() {
+    let page = this
+    const db = wx.cloud.database()
+    db.collection('data').skip(60).limit(20).get().then(res => {
+      console.log(res)
+      res.data.forEach(item=>
+      {
+        wx.request({
+          url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/unbindinguser',
+          method: 'post',
+          data: {
+            openid: item._openid
+          },
+          header: {
+            'content-type': "application/x-www-form-urlencoded",
+            token: app.globalData.token,
+          },
+          success(res) {
+            if (res.statusCode === 200) {
+              console.log(res.data)
+              const db = wx.cloud.database()
+              console.log(item._id)
+            } else {
+              page.setData({
+                error: '取消绑定失败'
+              })
+            }
+          },
+          fail(res) {
+            page.setData({
+              error: '取消绑定失败'
+            })
+          },
+          complete(res) {
+            wx.hideLoading()
+          }
+        })
+      })
+    })
+
+
   },
 })

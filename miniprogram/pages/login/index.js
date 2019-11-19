@@ -22,7 +22,46 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
+    this.show()
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function() {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+    this.show()
+  },
+  show()
+  {
     let page = this
     wx.request({
       url: 'https://lovelywhite.cn/tip',
@@ -34,91 +73,12 @@ Page({
     })
     wx.showLoading({
       title: '检查云端token',
-      mask:true
+      mask: true
     })
     getToken().then(res => {
-      console.log(res.token, res.id)
+      console.log(res.token, res.id, res.openid)
       app.globalData.token = res.token
-      page.getUser(res.id).then(res1 => {
-        page.data.person = res1.person
-        page.data.id = res.id
-        wx.navigateTo({
-          url: '/pages/detail/index',
-          success(res2) {
-            wx.hideLoading()
-          }
-        })
-
-      }).catch(res1 => {
-        console.log(res1)
-        wx.hideLoading()
-        const db = wx.cloud.database()
-        try {
-          db.collection('data').doc(res.id).remove()
-          page.setData(
-            {
-              isLogin:false
-            }
-          )
-        } catch (e) {
-          console.log(e)
-        }
-        page.setData({
-          error: res1.res.data.msg ? res1.res.data.msg : "错误"
-        })
-      })
-    }).catch(res => {
-
-      wx.hideLoading()
-      console.log(res)
-      page.setData({
-        error: "请登录",
-        isLogin: false
-      })
-    })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-    let page = this
-    wx.showLoading({
-      title: '检查云端token',
-      mask:true
-    })
-    getToken().then(res => {
-      console.log(res.token, res.id)
-      app.globalData.token = res.token
-      page.getUser(res.id).then(res1 => {
+      page.getUser(res.openid).then(res1 => {
         page.data.person = res1.person
         page.data.id = res.id
         wx.navigateTo({
@@ -134,12 +94,20 @@ Page({
         wx.stopPullDownRefresh()
         const db = wx.cloud.database()
         try {
-          db.collection('data').doc(res.id).remove()
-          page.setData(
+          console.log(res.id)
+          db.collection('data').doc(res.id).remove().then(
+            res2=>
             {
-              isLogin: false
+              console.log(res2)
+              page.setData({
+                isLogin: false
+              })
             }
-          )
+          ).catch(res2=>
+          {
+            console.log(res2)
+          })
+
         } catch (e) {
           console.log(e)
         }
@@ -157,18 +125,17 @@ Page({
       })
     })
   },
-
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
   bindAccountChange(e) {
@@ -208,7 +175,7 @@ Page({
                 success(res2) {
                   console.log(res2)
                   app.globalData.token = res1.token
-                  page.getUser(page.data.id).then(res3 => {
+                  page.getUser(res.result.openid).then(res3 => {
                     page.data.person = res3.person,
                       page.data.id = res2._id
                     page.setData({
@@ -228,8 +195,7 @@ Page({
                   console.log(res2)
                 }
               })
-            }
-            else {
+            } else {
               page.setData({
                 error: res1.res.data.msg
               })
@@ -244,27 +210,44 @@ Page({
     }
 
   },
-  getUser(username) {
+  getUser(openid) {
     return new Promise((resl, rej) => {
       wx.request({
-        url: 'https://wplib.haut.edu.cn/seatbook/api/sbookadmin/userlist',
+        url: 'https://wplib.haut.edu.cn/seatbook/api/seatbook/userinfo',
         method: 'post',
         header: {
           "content-type": "application/x-www-form-urlencoded",
           token: app.globalData.token
         },
         data: {
-          page: 1,
-          limit: 1,
-          bookingstatus: '',
-          userstr: username
+          openid: openid
         },
         success(res) {
           console.log(res)
-          if (res.data.userlist)
+          if (res.data.user)
             resl({
               code: 0,
-              person: res.data.userlist[0]
+              person: {
+                "userId": null,
+                "username": res.data.user.cardno,
+                "password": null,
+                "salt": null,
+                "email": null,
+                "mobile": null,
+                "status": null, //1
+                "roleIdList": null,
+                "createUserId": null,
+                "createTime": null, //"2019-11-07 23:00:39",
+                "breakDate": null,
+                "deptId": null,
+                "userno": res.data.user.cardno,
+                "bookingUserCategoryId": null,
+                "deptName": res.data.user.deptname,
+                "openId": openid,
+                "displayname": res.data.user.username,
+                "cardno": null,
+                "breakNumber": res.data.user.breaknumber
+              }
             })
           else {
             rej({
@@ -283,12 +266,9 @@ Page({
       })
     })
   },
-  onShow()
-  {
-    this.setData(
-      {
-        isLogin:this.data.isLogin
-      }
-    )
+  onShow() {
+    this.setData({
+      isLogin: this.data.isLogin
+    })
   }
 })

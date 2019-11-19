@@ -33,7 +33,7 @@
   <view class="scroll" style="justify-content:center;color:#FF6A6A">
     当前列表为空
   </view>
-  <view class="scroll" style="justify-content:flex-end;color:#FFBBFF">
+  <view class="scroll" bindtap="disp" style="justify-content:flex-end;color:#FFBBFF">
     管理员Utils
   </view>
 </view>
