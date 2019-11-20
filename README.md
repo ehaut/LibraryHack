@@ -14,7 +14,12 @@
 
 
 ```txt
-图书馆接口采用token存于本地的形式，我们只需要调用接口获取图书馆的token，之后每次请求将token以 token:'xxx'的形式存于headers中即可
+经研究发现，图书馆的系统采用了post/get提交JSON的形式进行数据传输，
+并且在后端验证token和refer。这里的token与我们想象的不同，
+一般来讲，token是一个变值，但是为了偷懒或者一些其他的原因，
+导致图书馆的token是一个类似于js的长久保存值，这就十分不合理了。
+除此之外图书馆的系统有提权漏洞，可通过特殊方式使用管理员的信息，
+等待图书馆更新维护系统吧！！！
 ```
 
 ## 登陆方式
@@ -29,7 +34,14 @@
 ### OpenID & Token登录（Android）
 
 ```txt
-此方法需要root权限，可以下载Termux终端或者ES文件浏览器来进入Android根目录，太极模块正在开发中，使用太极应该就很简单不用获取Root权限。根据反编译的WiseLibrary我们可以发现该程序使用了一个固定的Token来表示登陆状态，而这个token是使用wx.setStorage()函数存入缓存当中的，这十分的不安全。根据排查可以发现该缓存文件为：/data/data/com.tencent.mm/files/mmkv/AppBrandMMKVStorage1601335600 在mmkv文件夹下还有另一个同名后缀为crc的文件。该文件的作用是用来校验缓存文件，这两个文件缺一不可并且不可单独变化。
+此方法需要root权限，可以下载Termux终端或者ES文件浏览器来进入Android根目录，
+太极模块正在开发中，使用太极应该就很简单不用获取Root权限。根据反编译的
+WiseLibrary我们可以发现该程序使用了一个固定的Token来表示登陆状态，
+而这个token是使用wx.setStorage()函数存入缓存当中的，这十分的不安全。
+根据排查可以发现该缓存文件为：
+/data/data/com.tencent.mm/files/mmkv/AppBrandMMKVStorage1601335600 
+在mmkv文件夹下还有另一个同名后缀为crc的文件。
+该文件的作用是用来校验缓存文件，这两个文件缺一不可并且不可单独变化。
 ```
 ```txt
 我们使用命令打开该文件，截取其中的内容
@@ -42,7 +54,17 @@
 结果内容截取：
 ```
 ```json
-++@@@TOTAL@DATA@SIZE@@@19wx31f64ed54d4615c0__openId'&String#34#o-WiZ5UW7JxvQDbMSJPPhB3MTmpc)wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@53wx31f64ed54d4615c0__logs'&Array#33#[1574242251374,1574230663610])wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@67(wxGlobal__exitState:wx31f64ed54d4615c0:~'&#64#{"expireUnixTimestamp":1575451852}wxGlobal++@@@TOTAL@DATA@SIZE@@@64*wxGlobal__riskWarning:wx31f64ed54d4615c0:~'&#66#{"expireUnixTimestamp":1582018252}wxGlobal++@@@TOTAL@DATA@SIZE@@@130wxGlobal++@@@TOTAL@DATA@SIZE@@@130wx31f64ed54d4615c0__token/.String#41#4ebd73db-6ffd-4e61-b8cc-ae4f104fb226)wx31f64ed54d4615c0++
+++@@@TOTAL@DATA@SIZE@@@19wx31f64ed54d4615c0__openId'&String#34#o-
+WiZ5UW7JxvQDbMSJPPhB3MTmpc)wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@
+53wx31f64ed54d4615c0__logs'&Array#33#[1574242251374,1574230663610])
+wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@
+67(wxGlobal__exitState:wx31f64ed54d4615c0:~'
+&#64#{"expireUnixTimestamp":1575451852}wxGlobal++@@@TOTAL@DATA@SIZE
+@@@64*wxGlobal__riskWarning:wx31f64ed54d4615c0:~'&#66#{
+"expireUnixTimestamp":1582018252}wxGlobal++@@@TOTAL@DATA@SIZE@
+@@130wxGlobal++@@@TOTAL@DATA@SI
+ZE@@@130wx31f64ed54d4615c0__token/.String#41#4ebd73db-6ffd-4
+e61-b8cc-ae4f104fb226)wx31f64ed54d4615c0++
 ```
 
 ```txt
