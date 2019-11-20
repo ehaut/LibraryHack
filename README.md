@@ -17,6 +17,44 @@
 图书馆接口采用token存于本地的形式，我们只需要调用接口获取图书馆的token，之后每次请求将token以 token:'xxx'的形式存于headers中即可
 ```
 
+## 登陆方式
+
+### 账号密码登录
+
+```txt
+本程序支持与图书馆相同的账号密码登录方式，具体流程如下图所示
+```
+![账号登录](./pic/loginbyPassword.jpg)
+
+### OpenID & Token登录（Android）
+
+```txt
+此方法需要root权限，可以下载Termux终端或者ES文件浏览器来进入Android根目录，太极模块正在开发中，使用太极应该就很简单不用获取Root权限。根据反编译的WiseLibrary我们可以发现该程序使用了一个固定的Token来表示登陆状态，而这个token是使用wx.setStorage()函数存入缓存当中的，这十分的不安全。根据排查可以发现该缓存文件为：/data/data/com.tencent.mm/files/mmkv/AppBrandMMKVStorage1601335600 在mmkv文件夹下还有另一个同名后缀为crc的文件。该文件的作用是用来校验缓存文件，这两个文件缺一不可并且不可单独变化。
+```
+```txt
+我们使用命令打开该文件，截取其中的内容
+```
+
+```cmd
+ cat /data/data/com.tencent.mm/files/mmkv/AppBrandMMKVStorage1601335600
+```
+```txt
+结果内容截取：
+```
+```json
+++@@@TOTAL@DATA@SIZE@@@19wx31f64ed54d4615c0__openId'&String#34#o-WiZ5UW7JxvQDbMSJPPhB3MTmpc)wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@53wx31f64ed54d4615c0__logs'&Array#33#[1574242251374,1574230663610])wx31f64ed54d4615c0++@@@TOTAL@DATA@SIZE@@@67(wxGlobal__exitState:wx31f64ed54d4615c0:~'&#64#{"expireUnixTimestamp":1575451852}wxGlobal++@@@TOTAL@DATA@SIZE@@@64*wxGlobal__riskWarning:wx31f64ed54d4615c0:~'&#66#{"expireUnixTimestamp":1582018252}wxGlobal++@@@TOTAL@DATA@SIZE@@@130wxGlobal++@@@TOTAL@DATA@SIZE@@@130wx31f64ed54d4615c0__token/.String#41#4ebd73db-6ffd-4e61-b8cc-ae4f104fb226)wx31f64ed54d4615c0++
+```
+
+```txt
+不难发现可以在其中找到 
+```
+* openId'&String#34#o-WiZ5UW7JxvQDbMSJPPhB3MTmpc
+* token/.String#41#4ebd73db-6ffd-4e61-b8cc-ae4f104fb226
+
+```txt
+那接下来要做的只有填入信息了。强烈建议图书馆更改验证方式，嘿嘿。
+```
+
 ## 函数接口
 
 ```txt
@@ -126,13 +164,10 @@ wx.request({
 
 ## 程序展示图
 
-<div style="text-align:center">
-
 ![主页](./pic/pic1.jpg)
 
 ![详情页](./pic/pic2.jpg)
 
 ![预约页](./pic/pic3.jpg)
-</div>
 
 
