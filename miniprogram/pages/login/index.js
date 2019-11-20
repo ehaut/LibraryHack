@@ -16,52 +16,31 @@ Page({
     error: '',
     person: {},
     id: '',
-    isLogin: true
+    openid:'',
+    isLogin: true,
+    isToken: true,
+    slideButtons: [{
+      type: 'warn',
+      text: 'Token'
+    },{
+      text: '密码'
+    }]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     this.show()
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     this.show()
   },
-  show()
-  {
+  show() {
     let page = this
     wx.request({
       url: 'https://lovelywhite.cn/tip',
@@ -96,15 +75,13 @@ Page({
         try {
           console.log(res.id)
           db.collection('data').doc(res.id).remove().then(
-            res2=>
-            {
+            res2 => {
               console.log(res2)
               page.setData({
                 isLogin: false
               })
             }
-          ).catch(res2=>
-          {
+          ).catch(res2 => {
             console.log(res2)
           })
 
@@ -128,14 +105,14 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   },
   bindAccountChange(e) {
@@ -148,65 +125,159 @@ Page({
       password: e.detail.value
     })
   },
+  bindOpenIdChange(e)
+  {
+    this.setData({
+      openid: e.detail.value
+    })
+  },
+  slideButtonTap(e) {
+    this.data.password = ""
+    this.data.openid = ""
+    if (e.detail.index===0)
+    {
+      this.setData(
+        {
+          isToken: true
+        }
+      )
+    }
+    else
+    {
+      this.setData(
+        {
+          isToken: false
+        }
+      )
+    }
+  },
   login(e) {
     let page = this
-    if (this.data.id == '' || this.data.password == '') {
+    //password <- token and password
+    console.log(this.data.id, this.data.openid, this.data.password)
+    if (this.data.password == '') {
       this.setData({
-        error: '请输入账号密码'
+        error: '请输入完整'
       })
     } else {
-      wx.showLoading({
-        title: '登陆中',
-        mask: true
-      })
-      wx.cloud.callFunction({
-        name: 'login',
-        success(res) {
-          console.log(res)
-          getTokenFromServer(res.result.openid, page.data.id, page.data.password).then(res1 => {
-            console.log(res1)
-            if (0 == res1.code) {
-              let db = wx.cloud.database();
-              db.collection("data").add({
-                data: {
-                  _id: page.data.id,
-                  token: res1.token,
-                },
-                success(res2) {
-                  console.log(res2)
-                  app.globalData.token = res1.token
-                  page.getUser(res.result.openid).then(res3 => {
-                    page.data.person = res3.person,
-                      page.data.id = res2._id
-                    page.setData({
-                      isLogin: true
-                    })
-                    wx.navigateTo({
-                      url: '/pages/detail/index',
-                    })
-                    wx.hideLoading()
-                  }).catch(res3 => {
-
-                    wx.hideLoading()
-                    console.log(res3)
-                  })
-                },
-                fail(res2) {
-                  console.log(res2)
-                }
-              })
-            } else {
-              page.setData({
-                error: res1.res.data.msg
-              })
-              wx.hideLoading()
-            }
-          }).catch(res1 => {
-            wx.hideLoading()
-            console.log(res1)
+      //Token登录
+      if(page.data.isToken)
+      {
+        if (this.data.openid =='')
+        {
+          this.setData({
+            error: '请输入完整'
           })
         }
-      })
+        else
+        {
+          wx.showLoading({
+            title: '登陆中',
+            mask: true
+          })
+          //全局token需要提前配置，否则二getUser无法使用
+          app.globalData.token = page.data.password
+          page.getUser(page.data.openid).then(res => {
+            page.data.person = res.person;
+        
+            let db = wx.cloud.database();
+            db.collection("data").add({
+              data: {
+                _id: page.data.person.username,
+                token: page.data.password,
+                openid: page.data.openid,
+              },
+              success(res1) {
+                console.log(res1)
+                page.setData({
+                  isLogin: true
+                })
+                wx.navigateTo({
+                  url: '/pages/detail/index',
+                })
+                wx.hideLoading()
+              },
+              fail(res1) {
+                wx.hideLoading()
+                console.log(res1)
+              }
+            })
+            
+          }).catch(res => {
+            wx.hideLoading()
+            console.log(res)
+            page.setData({
+              error: res.res.data.msg ? res.res.data.msg : "错误"
+            })
+          })
+     
+        }
+      }
+      //账号密码登录
+      else
+      {
+        if (this.data.id == ''){
+          this.setData({
+            error: '请输入完整'
+          })
+        }
+        else
+        {
+          wx.showLoading({
+            title: '登陆中',
+            mask: true
+          })
+          wx.cloud.callFunction({
+            name: 'login',
+            success(res) {
+              console.log(res)
+              //自己提供openid 学号 密码 换取token
+              getTokenFromServer(res.result.openid, page.data.id, page.data.password).then(res1 => {
+                console.log(res1)
+                if (0 == res1.code) {
+                  let db = wx.cloud.database();
+                  db.collection("data").add({
+                    data: {
+                      _id: page.data.id,
+                      token: res1.token,
+                      openid: res.result.openid
+                    },
+                    success(res2) {
+                      console.log(res2)
+                      app.globalData.token = res1.token
+                      page.getUser(res.result.openid).then(res3 => {
+                        page.data.person = res3.person
+                        page.setData({
+                          isLogin: true
+                        })
+                        wx.navigateTo({
+                          url: '/pages/detail/index',
+                        })
+                        wx.hideLoading()
+                      }).catch(res3 => {
+                        wx.hideLoading()
+                        console.log(res3)
+                      })
+                    },
+                    fail(res2) {
+                      console.log(res2)
+                    }
+                  })
+                } else {
+                  page.setData({
+                    error: res1.res.data.msg
+                  })
+                  wx.hideLoading()
+                }
+              }).catch(res1 => {
+                wx.hideLoading()
+                console.log(res1)
+              })
+            }
+          })
+        }
+ 
+      }
     }
 
   },
@@ -262,7 +333,7 @@ Page({
             res: res
           })
         },
-        complete() {}
+        complete() { }
       })
     })
   },

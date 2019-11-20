@@ -14,8 +14,7 @@ App({
 
     }
     this.globalData = {
-      token:'8f50b798-6cce-46c6-8352-d22d830f6ad8'
-      // ''
+      token:''
     }
   }
 })

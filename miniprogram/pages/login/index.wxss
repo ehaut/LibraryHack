@@ -10,3 +10,7 @@
   color: rgb(66, 206, 61) !important;
   border: rgb(66, 206, 61)1rpx solid;
 }
+input
+{
+  padding-right: 50rpx;
+}

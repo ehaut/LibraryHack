@@ -2,12 +2,22 @@
 <mp-toptips msg="{{error}}" type="error" delay="1000" show="{{error}}"></mp-toptips>
 <mp-form>
   <mp-cells title="登录" footer="{{tip}}">
-    <mp-cell  title="学号" ext-class="weui-cell_vcode">
-      <input bindinput="bindAccountChange" class="weui-input" placeholder="请输入学号" />
-    </mp-cell>
-    <mp-cell title="密码" ext-class="weui-cell_vcode">
-      <input  bindinput="bindPasswordChange" type="password"  class="weui-input" placeholder="请输入密码"/>
-    </mp-cell>
+
+    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap">
+      <mp-cell wx:if="{{isToken}}" title="OpenId" ext-class="weui-cell_vcode">
+        <input bindinput="bindOpenIdChange" type="text" class="weui-input" placeholder="请输入OpenId" />
+      </mp-cell>
+      <mp-cell wx:if="{{isToken}}" title="Token" ext-class="weui-cell_vcode">
+        <input bindinput="bindPasswordChange" type="text" class="weui-input" placeholder="请输入Token" />
+      </mp-cell>
+      <mp-cell wx:if="{{!isToken}}" title="学号" ext-class="weui-cell_vcode">
+        <input bindinput="bindAccountChange" class="weui-input" placeholder="请输入学号" />
+      </mp-cell>
+      <mp-cell wx:if="{{!isToken}}" title="密码" ext-class="weui-cell_vcode">
+        <input bindinput="bindPasswordChange" type="password" class="weui-input" placeholder="请输入密码" />
+      </mp-cell>
+    </mp-slideview>
+
     <mp-cell footer="@苏西网络科技工作室"></mp-cell>
   </mp-cells>
 </mp-form>

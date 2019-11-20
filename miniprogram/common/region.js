@@ -399,7 +399,7 @@ export function getToken() {
             code: 0,
             id: res.data[0]._id,
             token: res.data[0].token,
-            openid: res.data[0]._openid
+            openid: res.data[0].openid
           })
         } else {
           rej({

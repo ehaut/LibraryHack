@@ -29,7 +29,6 @@ Page({
     let pages = getCurrentPages()
     this.setData({
       person: pages[pages.length - 2].data.person,
-      id: pages[pages.length - 2].data.id,
     })
     if (this.data.person.username == '201612010124') {
       this.setData({
@@ -165,7 +164,7 @@ Page({
                   let pages = getCurrentPages()
                   pages[pages.length - 2].data.isLogin = false
                   const db = wx.cloud.database()
-                  db.collection('data').doc(page.data.id).remove().then(
+                  db.collection('data').doc(page.data.person.username).remove().then(
                     e => {
                       page.setData({
                         success: '取消绑定成功',
